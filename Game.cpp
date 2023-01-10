@@ -78,6 +78,7 @@ void Game::handleEvents() {
 	else if (input.wasPressed(SDL_SCANCODE_F)) {
 		this->fullscreen = !this->fullscreen;
 		SDL_SetWindowFullscreen(this->window, this->fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
+		std::cout << ">> TOGGLED WINDOW FULLSCREEN: " << this->fullscreen ? "ON" : "OFF" << std::endl;
 	}
 
 }
