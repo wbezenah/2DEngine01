@@ -49,6 +49,7 @@ void Game::_init_(const char* windowTitle, int windowX, int windowY, int windowW
 	}
 }
 
+GameObject obj;
 void Game::handleEvents() {
 	this->input.begin();
 
@@ -72,15 +73,20 @@ void Game::handleEvents() {
 		break;
 	}
 
+	Command* command = input.getCommand();
+	//Check if input processes key as an object command
+	if (command) {
+		command->execute(obj);
+	}
+	//If not an object command, check for game command
 	if (input.wasPressed(SDL_SCANCODE_ESCAPE)) {
 		this->running = false;
 	}
-	else if (input.wasPressed(SDL_SCANCODE_F)) {
+	else if (input.wasPressed(SDL_SCANCODE_F11)) {
 		this->fullscreen = !this->fullscreen;
 		SDL_SetWindowFullscreen(this->window, this->fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
-		std::cout << ">> TOGGLED WINDOW FULLSCREEN: " << this->fullscreen ? "ON" : "OFF" << std::endl;
+		std::cout << ">> TOGGLED WINDOW FULLSCREEN: " << (this->fullscreen ? "ON" : "OFF") << std::endl;
 	}
-
 }
 
 void Game::updateGame() {
