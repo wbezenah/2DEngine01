@@ -3,7 +3,7 @@
 #include <SDL.h>
 #include <map>
 #include <vector>
-#include <memory>
+#include <cmath>
 #include "CommandList.h"
 
 class Input {

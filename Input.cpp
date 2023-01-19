@@ -41,21 +41,26 @@ Command* Input::getCommand() {
 		return new JumpCommand();
 	}
 	if (this->wasPressed(SDL_SCANCODE_W) || this->isHeld(SDL_SCANCODE_W)) {
-		dy += -10;
+		dy += -1 * objconst::SPRITE_SPEED;
 	}
 	if (this->wasPressed(SDL_SCANCODE_A) || this->isHeld(SDL_SCANCODE_A)) {
-		dx += -10;
+		dx += -1 * objconst::SPRITE_SPEED;
 	}
 	if (this->wasPressed(SDL_SCANCODE_S) || this->isHeld(SDL_SCANCODE_S)) {
-		dy += 10;
+		dy += objconst::SPRITE_SPEED;
 	}
 	if (this->wasPressed(SDL_SCANCODE_D) || this->isHeld(SDL_SCANCODE_D)) {
-		dx += 10;
+		dx += objconst::SPRITE_SPEED;
 	}
 
 	if (dx == 0 && dy == 0) {
 		return nullptr;
 	}
-
+	if (abs(dx) == abs(dy)) {
+		float resultX = dx / abs(dx) * sqrt(dx * dx / 2);
+		float resultY = dy / abs(dy) * sqrt(dy * dy/ 2);
+		dx = static_cast<int>(resultX);
+		dy = static_cast<int>(resultY);
+	}
 	return new MoveByCommand(dx, dy);
 }

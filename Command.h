@@ -6,6 +6,5 @@
 
 class Command {
 public:
-	virtual ~Command() {}
 	virtual void execute(GameObject& obj) {}
 };
