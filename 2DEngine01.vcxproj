@@ -150,9 +150,11 @@
     <ClInclude Include="CommandList.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="JumpCommand.h" />
     <ClInclude Include="MoveByCommand.h" />
+    <ClInclude Include="Vector2.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

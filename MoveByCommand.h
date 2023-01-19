@@ -11,7 +11,7 @@ public:
 	}
 
 	void execute(GameObject& obj) {
-		obj.moveTo(obj.getX() + _dx, obj.getY() + _dy);
+		obj.moveTo(obj.getPosition().x + _dx, obj.getPosition().y + _dy);
 	}
 
 private:

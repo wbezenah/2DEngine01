@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "Input.h"
+#include "GameObject.h"
 
 class Game {
 public:
@@ -18,10 +19,14 @@ public:
 	void clean();
 	bool isRunning();
 
+	SDL_Renderer* getRenderer();
+
 private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	bool running;
 	bool fullscreen;
 	Input input;
+
+	GameObject player;
 };

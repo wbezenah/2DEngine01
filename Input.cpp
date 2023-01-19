@@ -1,11 +1,7 @@
 #include "Input.h"
 
 Input::Input() {
-	this->commands.push_back(std::make_unique<JumpCommand>(JumpCommand()));
-	this->commands.push_back(std::make_unique<MoveByCommand>(MoveByCommand(0, 1)));
-	this->commands.push_back(std::make_unique<MoveByCommand>(MoveByCommand(-1, 0)));
-	this->commands.push_back(std::make_unique<MoveByCommand>(MoveByCommand(0, -1)));
-	this->commands.push_back(std::make_unique<MoveByCommand>(MoveByCommand(1, 0)));
+
 }
 
 void Input::begin() {
@@ -38,22 +34,28 @@ bool Input::isHeld(SDL_Scancode key) {
 }
 
 Command* Input::getCommand() {
-	if (this->wasPressed(SDL_SCANCODE_SPACE)) {
-		return this->commands[space].get();
+	int dx = 0;
+	int dy = 0;
+
+	if (this->wasPressed(SDL_SCANCODE_SPACE) || this->isHeld(SDL_SCANCODE_SPACE)) {
+		return new JumpCommand();
 	}
-	else if (this->wasPressed(SDL_SCANCODE_W)) {
-		return this->commands[w].get();
+	if (this->wasPressed(SDL_SCANCODE_W) || this->isHeld(SDL_SCANCODE_W)) {
+		dy += -10;
 	}
-	else if (this->wasPressed(SDL_SCANCODE_A)) {
-		return this->commands[a].get();
+	if (this->wasPressed(SDL_SCANCODE_A) || this->isHeld(SDL_SCANCODE_A)) {
+		dx += -10;
 	}
-	else if (this->wasPressed(SDL_SCANCODE_S)) {
-		return this->commands[s].get();
+	if (this->wasPressed(SDL_SCANCODE_S) || this->isHeld(SDL_SCANCODE_S)) {
+		dy += 10;
 	}
-	else if (this->wasPressed(SDL_SCANCODE_D)) {
-		return this->commands[d].get();
+	if (this->wasPressed(SDL_SCANCODE_D) || this->isHeld(SDL_SCANCODE_D)) {
+		dx += 10;
 	}
-	else {
+
+	if (dx == 0 && dy == 0) {
 		return nullptr;
 	}
+
+	return new MoveByCommand(dx, dy);
 }

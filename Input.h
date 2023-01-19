@@ -6,14 +6,6 @@
 #include <memory>
 #include "CommandList.h"
 
-enum Keys {
-	space,
-	w,
-	a,
-	s,
-	d,
-};
-
 class Input {
 public:
 	Input();
@@ -34,7 +26,4 @@ private:
 	std::map<SDL_Scancode, bool> heldKeys;
 	std::map<SDL_Scancode, bool> pressedKeys;
 	std::map<SDL_Scancode, bool> releasedKeys;
-	
-	//std::vector<std::unique_ptr<Command>> commands;
-	std::vector<std::unique_ptr<Command>> commands;
 };

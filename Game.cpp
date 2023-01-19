@@ -5,6 +5,7 @@ Game::Game() {
 	this->renderer = nullptr;
 	this->running = false;
 	this->fullscreen = false;
+	this->player = GameObject();
 }
 
 Game::~Game() {
@@ -40,6 +41,9 @@ void Game::_init_(const char* windowTitle, int windowX, int windowY, int windowW
 		else {
 			std::cout << ">>! Renderer FAILED TO INITALIZE" << std::endl;
 		}
+		IMG_Init(IMG_INIT_PNG);
+
+		this->player = GameObject(this->renderer, "Content/OCTO1.png", 100, 100, 32, 32);
 
 		//Game is running
 		this->running = true;
@@ -49,7 +53,6 @@ void Game::_init_(const char* windowTitle, int windowX, int windowY, int windowW
 	}
 }
 
-GameObject obj;
 void Game::handleEvents() {
 	this->input.begin();
 
@@ -76,7 +79,8 @@ void Game::handleEvents() {
 	Command* command = input.getCommand();
 	//Check if input processes key as an object command
 	if (command) {
-		command->execute(obj);
+		command->execute(this->player);
+		delete command;
 	}
 	//If not an object command, check for game command
 	if (input.wasPressed(SDL_SCANCODE_ESCAPE)) {
@@ -90,13 +94,17 @@ void Game::handleEvents() {
 }
 
 void Game::updateGame() {
-	SDL_RenderClear(this->renderer);
+	//SDL_RenderClear(this->renderer);
 
-	SDL_RenderPresent(this->renderer);
+	//SDL_RenderPresent(this->renderer);
 }
 
 void Game::render() {
+	SDL_RenderClear(this->renderer);
 
+	this->player.render(this->renderer);
+
+	SDL_RenderPresent(this->renderer);
 }
 
 void Game::clean() {
@@ -107,4 +115,8 @@ void Game::clean() {
 
 bool Game::isRunning() {
 	return this->running;
+}
+
+SDL_Renderer* Game::getRenderer() {
+	return this->renderer;
 }
