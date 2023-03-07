@@ -1,10 +1,14 @@
 #pragma once
 
 #include <SDL.h>
+#include <SDL_image.h>
+#include <SDL_ttf.h>
 #include <iostream>
+#include <vector>
 
+#include "Constants.h"
 #include "Input.h"
-#include "GameObject.h"
+#include "GameObjects.h"
 
 class Game {
 public:
@@ -18,6 +22,7 @@ public:
 
 	void clean();
 	bool isRunning();
+	bool isPaused();
 
 	SDL_Renderer* getRenderer();
 
@@ -25,8 +30,10 @@ private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	bool running;
+	bool paused;
 	bool fullscreen;
 	Input input;
 
-	GameObject player;
+	Player player;
+	std::vector<GameObject> pauseMenu;
 };

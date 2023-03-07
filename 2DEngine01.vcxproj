@@ -75,8 +75,8 @@
     <LibraryPath>C:\vclib\SDL2_image-2.6.2\lib\x64;C:\vclib\SDL2-2.24.2\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\vclib\SDL2_image-2.6.2\include;C:\vclib\SDL2-2.24.2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\vclib\SDL2_image-2.6.2\lib\x64;C:\vclib\SDL2-2.24.2\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\vclib\SDL2_ttf-2.20.2\include;C:\vclib\SDL2_image-2.6.2\include;C:\vclib\SDL2-2.24.2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\vclib\SDL2_ttf-2.20.2\lib\x64;C:\vclib\SDL2_image-2.6.2\lib\x64;C:\vclib\SDL2-2.24.2\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -120,8 +120,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\vclib\SDL2_image-2.6.2\lib\x64;C:\vclib\SDL2-2.24.2\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\vclib\SDL2_ttf-2.20.2\lib\x64;C:\vclib\SDL2_image-2.6.2\lib\x64;C:\vclib\SDL2-2.24.2\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -146,15 +146,19 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Button.h" />
+    <ClInclude Include="ClickCommand.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="CommandList.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="ECS.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameObjects.h" />
     <ClInclude Include="Input.h" />
-    <ClInclude Include="JumpCommand.h" />
+    <ClInclude Include="SpaceCommand.h" />
     <ClInclude Include="MoveByCommand.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Vector2.h" />
   </ItemGroup>
   <ItemGroup>

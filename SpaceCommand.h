@@ -5,6 +5,6 @@
 class JumpCommand : public Command {
 public:
 	void execute(GameObject& obj) {
-		obj.jump();
+		obj.space();
 	}
 };

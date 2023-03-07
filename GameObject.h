@@ -4,13 +4,12 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
-#include "Constants.h"
 #include "Vector2.h"
 
 class GameObject {
 public:
 	GameObject() = default;
-	GameObject(SDL_Renderer* renderer, const char* texture_sheet, int xPos, int yPos, int width, int height) {
+	GameObject(SDL_Renderer* renderer, const char* texture_sheet, int xPos, int yPos, int width, int height, int scale) {
 		this->position = Vector2(xPos, yPos);
 
 		SDL_Surface* tempSurface = IMG_Load(texture_sheet);
@@ -32,22 +31,16 @@ public:
 		this->destination = SDL_Rect();
 		this->destination.x = this->position.x;
 		this->destination.y = this->position.y;
-		this->destination.w = width * objconst::SPRITE_SCALE;
-		this->destination.h = height * objconst::SPRITE_SCALE;
+		this->destination.w = width * scale;
+		this->destination.h = height * scale;
 	}
-	void jump() {
-		std::cout << "JUMPED" << std::endl;
-	}
-	void moveTo(int x, int y) {
-		this->position.x = x;
-		this->position.y = y;
-		std::cout << "MOVED TO " << x << "," << y << std::endl;
-
-		this->destination.x = this->position.x;
-		this->destination.y = this->position.y;
-	}
+	virtual void space() {}
+	virtual void moveTo(int x, int y) {}
+	virtual void click() {}
 
 	Vector2 getPosition() { return this->position; }
+	int getWidth() { return this->destination.w; }
+	int getHeight() { return this->destination.h; }
 
 	void render(SDL_Renderer* renderer) {
 		int flag = SDL_RenderCopy(renderer, this->texture, &this->source, &this->destination);
@@ -56,7 +49,7 @@ public:
 		}
 	}
 
-private:
+protected:
 	Vector2 position;
 	SDL_Texture* texture;
 	SDL_Rect source;

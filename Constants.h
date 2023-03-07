@@ -8,4 +8,6 @@ namespace gameconst {
 namespace objconst {
 	const int SPRITE_SCALE = 2;
 	const int SPRITE_SPEED = 5;
+	
+	const int MENU_SCALE = 1;
 }

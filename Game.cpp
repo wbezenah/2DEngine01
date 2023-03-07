@@ -4,8 +4,8 @@ Game::Game() {
 	this->window = nullptr;
 	this->renderer = nullptr;
 	this->running = false;
+	this->paused = true;
 	this->fullscreen = false;
-	this->player = GameObject();
 }
 
 Game::~Game() {
@@ -42,11 +42,23 @@ void Game::_init_(const char* windowTitle, int windowX, int windowY, int windowW
 			std::cout << ">>! Renderer FAILED TO INITALIZE" << std::endl;
 		}
 		IMG_Init(IMG_INIT_PNG);
+		TTF_Init();
 
-		this->player = GameObject(this->renderer, "Content/OCTO1.png", 100, 100, 32, 32);
+		//ADD MAIN MENU OBJECT
+		int windowWidth;
+		int windowHeight;
+		SDL_GetWindowSize(this->window, &windowWidth, &windowHeight);
+		this->pauseMenu.push_back(GameObject(this->renderer, "Content/RESUME_BUTTON.png", 200, 200, 128, 64, objconst::MENU_SCALE));
+		this->pauseMenu.push_back(GameObject(this->renderer, "Content/QUIT_BUTTON.png", 200, 200, 128, 64, objconst::MENU_SCALE));
+		
+		//ADD PLAYER OBJECT
+		this->player = Player(this->renderer, "Content/OCTO1.png", 100, 100, 32, 32, objconst::SPRITE_SCALE);
 
 		//Game is running
+		this->paused = false;
 		this->running = true;
+		SDL_ShowCursor(SDL_DISABLE);
+		std::cout << ">> DONE WITH INIT" << std::endl;
 	}
 	else {
 		std::cout << ">>! SDL FAILED TO INITIALIZE" << std::endl;
@@ -76,15 +88,30 @@ void Game::handleEvents() {
 		break;
 	}
 
-	Command* command = input.getCommand();
-	//Check if input processes key as an object command
-	if (command) {
-		command->execute(this->player);
-		delete command;
+	if (this->paused) {
+		if (event.type == SDL_MOUSEBUTTONDOWN) {
+
+		}
 	}
+	else {
+		Command* command = input.getCommand();
+		//Check if input processes key as an object command
+		if (command) {
+			command->execute(this->player);
+			delete command;
+		}
+	}
+
 	//If not an object command, check for game command
 	if (input.wasPressed(SDL_SCANCODE_ESCAPE)) {
-		this->running = false;
+		if (this->paused) {
+			this->paused = false;
+			SDL_ShowCursor(SDL_DISABLE);
+		}
+		else {
+			this->paused = true;
+			SDL_ShowCursor(SDL_ENABLE);
+		}
 	}
 	else if (input.wasPressed(SDL_SCANCODE_F11)) {
 		this->fullscreen = !this->fullscreen;
@@ -102,19 +129,29 @@ void Game::updateGame() {
 void Game::render() {
 	SDL_RenderClear(this->renderer);
 
+	if (this->paused) {
+		
+	}
+
 	this->player.render(this->renderer);
 
 	SDL_RenderPresent(this->renderer);
 }
 
 void Game::clean() {
-	SDL_DestroyWindow(this->window);
 	SDL_DestroyRenderer(this->renderer);
+	SDL_DestroyWindow(this->window);
+	IMG_Quit();
+	TTF_Quit();
 	SDL_Quit();
 }
 
 bool Game::isRunning() {
 	return this->running;
+}
+
+bool Game::isPaused() {
+	return this->paused;
 }
 
 SDL_Renderer* Game::getRenderer() {
