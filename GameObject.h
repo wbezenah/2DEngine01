@@ -36,7 +36,6 @@ public:
 	}
 	virtual void space() {}
 	virtual void moveTo(int x, int y) {}
-	virtual void click() {}
 
 	Vector2 getPosition() { return this->position; }
 	int getWidth() { return this->destination.w; }

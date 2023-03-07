@@ -11,3 +11,7 @@ namespace objconst {
 	
 	const int MENU_SCALE = 1;
 }
+
+namespace UIconst {
+	const int buttonGap = 10;
+}

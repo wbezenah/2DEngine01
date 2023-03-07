@@ -10,6 +10,11 @@
 #include "Input.h"
 #include "GameObjects.h"
 
+typedef struct pauseMenu {
+	Button resume;
+	Button quit;
+};
+
 class Game {
 public:
 	Game();
@@ -26,6 +31,10 @@ public:
 
 	SDL_Renderer* getRenderer();
 
+	void updateButtonPositions();
+
+	static bool checkWithin(Vector2 loc, Vector2 origin, int width, int height);
+
 private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
@@ -35,5 +44,5 @@ private:
 	Input input;
 
 	Player player;
-	std::vector<GameObject> pauseMenu;
+	pauseMenu pM;
 };

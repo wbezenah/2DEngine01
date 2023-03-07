@@ -71,9 +71,6 @@
     <ClInclude Include="Button.h">
       <Filter>Header Files\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="ClickCommand.h">
-      <Filter>Header Files\Commands</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

@@ -48,8 +48,12 @@ void Game::_init_(const char* windowTitle, int windowX, int windowY, int windowW
 		int windowWidth;
 		int windowHeight;
 		SDL_GetWindowSize(this->window, &windowWidth, &windowHeight);
-		this->pauseMenu.push_back(GameObject(this->renderer, "Content/RESUME_BUTTON.png", 200, 200, 128, 64, objconst::MENU_SCALE));
-		this->pauseMenu.push_back(GameObject(this->renderer, "Content/QUIT_BUTTON.png", 200, 200, 128, 64, objconst::MENU_SCALE));
+		//CALCULATE BUTTON POSITIONS
+		int xPos = (windowWidth - 128) / 2;
+		int y1 = (windowHeight / 2) - 64 - (UIconst::buttonGap / 2);
+		int y2 = (windowHeight / 2) + (UIconst::buttonGap / 2);
+		this->pM.quit = Button(this->renderer, "Content/QUIT_BUTTON.png", xPos, y2, 128, 64, objconst::MENU_SCALE);
+		this->pM.resume = Button(this->renderer, "Content/RESUME_BUTTON.png", xPos, y1, 128, 64, objconst::MENU_SCALE);
 		
 		//ADD PLAYER OBJECT
 		this->player = Player(this->renderer, "Content/OCTO1.png", 100, 100, 32, 32, objconst::SPRITE_SCALE);
@@ -83,19 +87,29 @@ void Game::handleEvents() {
 	case SDL_KEYDOWN:
 		input.keyDown(event);
 		break;
+	
+	case SDL_MOUSEBUTTONDOWN:
+		if (this->paused && event.button.button == SDL_BUTTON(SDL_BUTTON_LEFT)) {
+			Vector2 clickPos = Vector2(event.button.x, event.button.y);
+			if (checkWithin(clickPos, this->pM.quit.getPosition(), this->pM.quit.getWidth(), this->pM.quit.getHeight())) {
+				this->running = false;
+			}
+			else if (checkWithin(clickPos, this->pM.resume.getPosition(), this->pM.resume.getWidth(), this->pM.resume.getHeight())) {
+				this->paused = false;
+				SDL_ShowCursor(SDL_DISABLE);
+			}
+		}
+		break;
 
 	default:
 		break;
 	}
 
-	if (this->paused) {
-		if (event.type == SDL_MOUSEBUTTONDOWN) {
-
-		}
-	}
-	else {
-		Command* command = input.getCommand();
+	Command* command;
+	
+	if (!this->paused) {
 		//Check if input processes key as an object command
+		command = input.getCommand();
 		if (command) {
 			command->execute(this->player);
 			delete command;
@@ -117,6 +131,7 @@ void Game::handleEvents() {
 		this->fullscreen = !this->fullscreen;
 		SDL_SetWindowFullscreen(this->window, this->fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
 		std::cout << ">> TOGGLED WINDOW FULLSCREEN: " << (this->fullscreen ? "ON" : "OFF") << std::endl;
+		this->updateButtonPositions();
 	}
 }
 
@@ -129,11 +144,12 @@ void Game::updateGame() {
 void Game::render() {
 	SDL_RenderClear(this->renderer);
 
-	if (this->paused) {
-		
-	}
-
 	this->player.render(this->renderer);
+
+	if (this->paused) {
+		pM.resume.render(this->renderer);
+		pM.quit.render(this->renderer);
+	}
 
 	SDL_RenderPresent(this->renderer);
 }
@@ -156,4 +172,22 @@ bool Game::isPaused() {
 
 SDL_Renderer* Game::getRenderer() {
 	return this->renderer;
+}
+
+bool Game::checkWithin(Vector2 pos, Vector2 origin, int width, int height) {
+	return (pos.x >= origin.x && pos.x <= (origin.x + width) &&
+			pos.y >= origin.y && pos.y <= (origin.y + height));
+}
+
+void Game::updateButtonPositions() {
+	int windowWidth;
+	int windowHeight;
+	SDL_GetWindowSize(this->window, &windowWidth, &windowHeight);
+	//CALCULATE BUTTON POSITIONS
+	int xPos = (windowWidth - 128) / 2;
+	int y1 = (windowHeight / 2) - 64 - (UIconst::buttonGap / 2);
+	int y2 = (windowHeight / 2) + (UIconst::buttonGap / 2);
+
+	this->pM.quit.moveTo(xPos, y2);
+	this->pM.resume.moveTo(xPos, y1);
 }

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Game.h"
 #include "GameObject.h"
 
 class Button : public GameObject {
@@ -9,13 +8,14 @@ public:
 	Button(SDL_Renderer* renderer, const char* texture_sheet, int xPos, int yPos, int width, int height, int scale) :
 		GameObject(renderer, texture_sheet, xPos, yPos, width, height, scale) {}
 
+	void moveTo(int x, int y) {
+		this->position.x = x;
+		this->position.y = y;
+		std::cout << "MOVED TO " << x << "," << y << std::endl;
 
-	void click() {
-		this->pressed = true;
+		this->destination.x = this->position.x;
+		this->destination.y = this->position.y;
 	}
-
-	bool checkPressed() { return this->pressed; }
-
 private:
-	bool pressed = false;
+	
 };
