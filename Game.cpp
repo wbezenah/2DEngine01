@@ -52,9 +52,12 @@ void Game::_init_(const char* windowTitle, int windowX, int windowY, int windowW
 		int xPos = (windowWidth - 128) / 2;
 		int y1 = (windowHeight / 2) - 64 - (UIconst::buttonGap / 2);
 		int y2 = (windowHeight / 2) + (UIconst::buttonGap / 2);
-		this->pM.quit = Button(this->renderer, "Content/QUIT_BUTTON.png", xPos, y2, 128, 64, objconst::MENU_SCALE);
-		this->pM.resume = Button(this->renderer, "Content/RESUME_BUTTON.png", xPos, y1, 128, 64, objconst::MENU_SCALE);
+		Button quitButton = Button("quit",this->renderer, "Content/QUIT_BUTTON.png", xPos, y2, 128, 64, objconst::MENU_SCALE);
+		Button resumeButton = Button("resume",this->renderer, "Content/RESUME_BUTTON.png", xPos, y1, 128, 64, objconst::MENU_SCALE);
 		
+		this->pauseMenu.addButton(resumeButton, UIconst::resume);
+		this->pauseMenu.addButton(quitButton, UIconst::quit);
+
 		//ADD PLAYER OBJECT
 		this->player = Player(this->renderer, "Content/OCTO1.png", 100, 100, 32, 32, objconst::SPRITE_SCALE);
 
@@ -91,12 +94,18 @@ void Game::handleEvents() {
 	case SDL_MOUSEBUTTONDOWN:
 		if (this->paused && event.button.button == SDL_BUTTON(SDL_BUTTON_LEFT)) {
 			Vector2 clickPos = Vector2(event.button.x, event.button.y);
-			if (checkWithin(clickPos, this->pM.quit.getPosition(), this->pM.quit.getWidth(), this->pM.quit.getHeight())) {
-				this->running = false;
-			}
-			else if (checkWithin(clickPos, this->pM.resume.getPosition(), this->pM.resume.getWidth(), this->pM.resume.getHeight())) {
+
+			UIconst::ButtonType clickType = this->pauseMenu.checkClicks(clickPos);
+			switch (clickType) {
+			case UIconst::resume:
 				this->paused = false;
 				SDL_ShowCursor(SDL_DISABLE);
+				break;
+			case UIconst::quit:
+				this->running = false;
+				break;
+			default:
+				break;
 			}
 		}
 		break;
@@ -119,10 +128,12 @@ void Game::handleEvents() {
 	//If not an object command, check for game command
 	if (input.wasPressed(SDL_SCANCODE_ESCAPE)) {
 		if (this->paused) {
+			std::cout << ">> TOGGLED PAUSE MENU: OFF" << std::endl;
 			this->paused = false;
 			SDL_ShowCursor(SDL_DISABLE);
 		}
 		else {
+			std::cout << ">> TOGGLED PAUSE MENU: ON" << std::endl;
 			this->paused = true;
 			SDL_ShowCursor(SDL_ENABLE);
 		}
@@ -147,8 +158,7 @@ void Game::render() {
 	this->player.render(this->renderer);
 
 	if (this->paused) {
-		pM.resume.render(this->renderer);
-		pM.quit.render(this->renderer);
+		this->pauseMenu.render(this->renderer);
 	}
 
 	SDL_RenderPresent(this->renderer);
@@ -174,6 +184,7 @@ SDL_Renderer* Game::getRenderer() {
 	return this->renderer;
 }
 
+//checks if pos is within the rectangular bounds represented origin, width, and height
 bool Game::checkWithin(Vector2 pos, Vector2 origin, int width, int height) {
 	return (pos.x >= origin.x && pos.x <= (origin.x + width) &&
 			pos.y >= origin.y && pos.y <= (origin.y + height));
@@ -188,6 +199,6 @@ void Game::updateButtonPositions() {
 	int y1 = (windowHeight / 2) - 64 - (UIconst::buttonGap / 2);
 	int y2 = (windowHeight / 2) + (UIconst::buttonGap / 2);
 
-	this->pM.quit.moveTo(xPos, y2);
-	this->pM.resume.moveTo(xPos, y1);
+	//this->pM.quit.moveTo(xPos, y2);
+	//this->pM.resume.moveTo(xPos, y1);
 }

@@ -10,11 +10,6 @@
 #include "Input.h"
 #include "GameObjects.h"
 
-typedef struct pauseMenu {
-	Button resume;
-	Button quit;
-};
-
 class Game {
 public:
 	Game();
@@ -44,5 +39,5 @@ private:
 	Input input;
 
 	Player player;
-	pauseMenu pM;
+	PauseMenu pauseMenu;
 };

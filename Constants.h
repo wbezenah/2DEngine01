@@ -14,4 +14,10 @@ namespace objconst {
 
 namespace UIconst {
 	const int buttonGap = 10;
+
+	enum ButtonType {
+		missing = 0,
+		quit,
+		resume
+	};
 }
