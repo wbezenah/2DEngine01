@@ -11,7 +11,7 @@ public:
 	void moveTo(int x, int y) {
 		this->position.x = x;
 		this->position.y = y;
-		std::cout << "MOVED TO " << x << "," << y << std::endl;
+		//std::cout << "MOVED TO " << x << "," << y << std::endl;
 
 		this->destination.x = this->position.x;
 		this->destination.y = this->position.y;

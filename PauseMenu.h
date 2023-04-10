@@ -3,6 +3,7 @@
 #include <SDL.h>
 #include <map>
 #include <vector>
+#include <iostream>
 
 #include "Constants.h"
 #include "Button.h"
@@ -31,6 +32,30 @@ public:
 			}
 		}
 		return UIconst::missing;
+	}
+
+	void updateButtonPositions(int windowWidth, int windowHeight) {
+		int nButtons = this->menuButtons.size();
+		if (nButtons == 0) { return; }
+		
+		int nAbove = nButtons / 2;
+		int nBelow = nButtons - nAbove;
+		int winHeightMid = windowHeight / 2;
+
+		for (int i = 0; i < nAbove; i++) {
+			auto& curr = this->menuButtons.at(i);
+			int xPos = (windowWidth - curr.getWidth()) / 2;
+			int yPos = winHeightMid - ((i+1) * UIconst::buttonGap) - ((i+1) * curr.getHeight());
+
+			curr.moveTo(xPos, yPos);
+		}
+		for (int i = 0; i < nBelow; i++) {
+			auto& curr = this->menuButtons.at(i + nAbove);
+			int xPos = (windowWidth - curr.getWidth()) / 2;
+			int yPos = winHeightMid + ((i+1) * UIconst::buttonGap) + ((i) * curr.getHeight());
+
+			curr.moveTo(xPos, yPos);
+		}
 	}
 
 private:

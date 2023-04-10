@@ -30,8 +30,10 @@ void Game::_init_(const char* windowTitle, int windowX, int windowY, int windowW
 		}
 		else {
 			std::cout << ">>! Window FAILED TO INITIALIZE" << std::endl;
+			this->running = false;
+			return;
 		}
-
+		SDL_SetWindowResizable(this->window, SDL_bool(true));
 		//Initialize Renderer
 		this->renderer = SDL_CreateRenderer(this->window, -1, 0);
 		if (this->renderer) {
@@ -40,6 +42,8 @@ void Game::_init_(const char* windowTitle, int windowX, int windowY, int windowW
 		}
 		else {
 			std::cout << ">>! Renderer FAILED TO INITALIZE" << std::endl;
+			this->running = false;
+			return;
 		}
 		IMG_Init(IMG_INIT_PNG);
 		TTF_Init();
@@ -142,13 +146,14 @@ void Game::handleEvents() {
 		this->fullscreen = !this->fullscreen;
 		SDL_SetWindowFullscreen(this->window, this->fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0);
 		std::cout << ">> TOGGLED WINDOW FULLSCREEN: " << (this->fullscreen ? "ON" : "OFF") << std::endl;
-		this->updateButtonPositions();
 	}
 }
 
 void Game::updateGame() {
 	//SDL_RenderClear(this->renderer);
-
+	if (this->paused) {
+		this->updateButtonPositions();
+	}
 	//SDL_RenderPresent(this->renderer);
 }
 
@@ -194,11 +199,11 @@ void Game::updateButtonPositions() {
 	int windowWidth;
 	int windowHeight;
 	SDL_GetWindowSize(this->window, &windowWidth, &windowHeight);
+	this->pauseMenu.updateButtonPositions(windowWidth, windowHeight);
 	//CALCULATE BUTTON POSITIONS
-	int xPos = (windowWidth - 128) / 2;
-	int y1 = (windowHeight / 2) - 64 - (UIconst::buttonGap / 2);
-	int y2 = (windowHeight / 2) + (UIconst::buttonGap / 2);
-
+	//int xPos = (windowWidth - 128) / 2;
+	//int y1 = (windowHeight / 2) - 64 - (UIconst::buttonGap / 2);
+	//int y2 = (windowHeight / 2) + (UIconst::buttonGap / 2);
 	//this->pM.quit.moveTo(xPos, y2);
 	//this->pM.resume.moveTo(xPos, y1);
 }
