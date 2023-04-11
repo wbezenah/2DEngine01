@@ -52,15 +52,13 @@ void Game::_init_(const char* windowTitle, int windowX, int windowY, int windowW
 		int windowWidth;
 		int windowHeight;
 		SDL_GetWindowSize(this->window, &windowWidth, &windowHeight);
-		//CALCULATE BUTTON POSITIONS
-		int xPos = (windowWidth - 128) / 2;
-		int y1 = (windowHeight / 2) - 64 - (UIconst::buttonGap / 2);
-		int y2 = (windowHeight / 2) + (UIconst::buttonGap / 2);
-		Button quitButton = Button("quit",this->renderer, "Content/QUIT_BUTTON.png", xPos, y2, 128, 64, objconst::MENU_SCALE);
-		Button resumeButton = Button("resume",this->renderer, "Content/RESUME_BUTTON.png", xPos, y1, 128, 64, objconst::MENU_SCALE);
+		Button quitButton = Button("quit",this->renderer, "Content/QUIT_BUTTON.png", 0, 0, 128, 64, objconst::MENU_SCALE);
+		Button resumeButton = Button("resume",this->renderer, "Content/RESUME_BUTTON.png", 0, 0, 128, 64, objconst::MENU_SCALE);
+		//Button resumeButton2 = Button("resume",this->renderer, "Content/RESUME_BUTTON.png", 0, 0, 128, 64, objconst::MENU_SCALE);
 		
 		this->pauseMenu.addButton(resumeButton, UIconst::resume);
 		this->pauseMenu.addButton(quitButton, UIconst::quit);
+		//this->pauseMenu.addButton(resumeButton2, UIconst::resume);
 
 		//ADD PLAYER OBJECT
 		this->player = Player(this->renderer, "Content/OCTO1.png", 100, 100, 32, 32, objconst::SPRITE_SCALE);
@@ -196,14 +194,17 @@ bool Game::checkWithin(Vector2 pos, Vector2 origin, int width, int height) {
 }
 
 void Game::updateButtonPositions() {
+	static int prevW = 0, prevH = 0;
+	
 	int windowWidth;
 	int windowHeight;
 	SDL_GetWindowSize(this->window, &windowWidth, &windowHeight);
-	this->pauseMenu.updateButtonPositions(windowWidth, windowHeight);
-	//CALCULATE BUTTON POSITIONS
-	//int xPos = (windowWidth - 128) / 2;
-	//int y1 = (windowHeight / 2) - 64 - (UIconst::buttonGap / 2);
-	//int y2 = (windowHeight / 2) + (UIconst::buttonGap / 2);
-	//this->pM.quit.moveTo(xPos, y2);
-	//this->pM.resume.moveTo(xPos, y1);
+
+	//only enter function calls if window has changed
+	if (windowWidth != prevW || windowHeight != prevH) {
+		this->pauseMenu.updateButtonPositions(windowWidth, windowHeight);
+	}
+
+	prevW = windowWidth;
+	prevH = windowHeight;
 }

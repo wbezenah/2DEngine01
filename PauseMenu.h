@@ -37,10 +37,9 @@ public:
 	void updateButtonPositions(int windowWidth, int windowHeight) {
 		int nButtons = this->menuButtons.size();
 		if (nButtons == 0) { return; }
-		
 		int nAbove = nButtons / 2;
 		int nBelow = nButtons - nAbove;
-		int winHeightMid = windowHeight / 2;
+		int winHeightMid = UIconst::buttonGap + (windowHeight / 2);
 
 		for (int i = 0; i < nAbove; i++) {
 			auto& curr = this->menuButtons.at(i);
@@ -52,7 +51,7 @@ public:
 		for (int i = 0; i < nBelow; i++) {
 			auto& curr = this->menuButtons.at(i + nAbove);
 			int xPos = (windowWidth - curr.getWidth()) / 2;
-			int yPos = winHeightMid + ((i+1) * UIconst::buttonGap) + ((i) * curr.getHeight());
+			int yPos = winHeightMid + ((i) * UIconst::buttonGap) + ((i) * curr.getHeight());
 
 			curr.moveTo(xPos, yPos);
 		}
